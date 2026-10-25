@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Technical Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-white: #ffffff;
+            --electric-violet: #8F00FF;
+            --electric-purple: #BF40BF;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f200ff 0%, #3b0076 100%);
+            min-height: 100vh;
+            color: var(--bg-white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .max{
+            font-family: Georgia;
+            text-align: center;
+        }
+
+        .quiz-card {
+            background-color: var(--bg-white);
+            color: #212529;
+            border-radius: 20px;
+            border: 2px solid var(--electric-violet);
+            box-shadow: 0 10px 30px rgba(143, 0, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            color: var(--electric-violet);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .question-box {
+            background-color: #f8f5fc;
+            border-left: 5px solid var(--electric-violet);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .question-box:hover {
+            background-color: #f1e6ff;
+            box-shadow: 0 4px 12px rgba(191, 64, 191, 0.15);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--electric-violet);
+            border-color: var(--electric-violet);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--electric-purple);
+            box-shadow: 0 0 0 0.25rem rgba(143, 0, 255, 0.25);
+        }
+
+        .btn-primary-custom {
+            background-color: var(--electric-violet);
+            color: var(--bg-white);
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: var(--electric-purple);
+            color: var(--bg-white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(143, 0, 255, 0.4);
+        }
+
+        .btn-secondary-custom {
+            background-color: transparent;
+            color: var(--electric-violet);
+            border: 2px solid var(--electric-violet);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background-color: var(--electric-violet);
+            color: var(--bg-white);
+        }
+
+        .form-check-label {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 mb-5" style="max-width: 750px;">
+        <div class="card quiz-card shadow p-5">
+            <h2 class="max">Technical Skills Quiz</h2>
+            <form method="POST" class="mt-3">
+                {% csrf_token %}
+                {% for q in questions %}
+                    <div class="mb-4 question-box">
+                        <p class="mb-3"><strong>{{ forloop.counter }}. {{ q.question_text }}</strong></p>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="A" id="q{{ q.id }}_a" required>
+                            <label class="form-check-label" for="q{{ q.id }}_a">A) {{ q.option_a }}</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="B" id="q{{ q.id }}_b">
+                            <label class="form-check-label" for="q{{ q.id }}_b">B) {{ q.option_b }}</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="C" id="q{{ q.id }}_c">
+                            <label class="form-check-label" for="q{{ q.id }}_c">C) {{ q.option_c }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="question_{{ q.id }}" value="D" id="q{{ q.id }}_d">
+                            <label class="form-check-label" for="q{{ q.id }}_d">D) {{ q.option_d }}</label>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-danger text-center fw-bold">No quiz questions found! Add some via Django Admin panel.</p>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    {% if questions %}
+                        <button type="submit" class="btn btn-primary-custom btn-lg px-4">Submit Quiz</button>
+                    {% endif %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary-custom btn-lg px-4">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

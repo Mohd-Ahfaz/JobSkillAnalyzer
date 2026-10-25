@@ -1,0 +1,42 @@
+{% extends 'analyzer/base.html' %}
+
+{% block title %}Career Profile Setup - Job Skill Analyzer{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 500px;">
+    <div style="display: inline-block; background: rgba(197, 72, 255, 0.15); border: 1px solid rgba(197, 72, 255, 0.4); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; color: #ffffff; margin-bottom: 0.8rem; font-weight: 500;">
+        🚀 Step 2 of 2: Profile Setup
+    </div>
+    
+    <h2 style="margin-bottom: 0.4rem; color: #ffffff;">Tell us about your career goals</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.88rem;">
+        We'll customize your skill matching and market analytics based on your target role.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">Target Job Role</label>
+            <input type="text" name="target_role" placeholder="e.g., Full Stack Engineer, Data Analyst" required>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">Experience Level</label>
+            <select name="experience_level">
+                <option value="Student / Fresher">Student / Fresher</option>
+                <option value="Junior (1-2 Years)">Junior (1-2 Years)</option>
+                <option value="Mid-Level (3-5 Years)">Mid-Level (3-5 Years)</option>
+                <option value="Senior (5+ Years)">Senior (5+ Years)</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 1.2rem;">
+            <label style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">Your Core Tech Stack / Skills</label>
+            <input type="text" name="primary_skills" placeholder="e.g., Python, Django, MySQL, Git, React" required>
+        </div>
+
+        <button type="submit" class="form-btn">Complete Setup & Launch Dashboard</button>
+    </form>
+</div>
+{% endblock %}

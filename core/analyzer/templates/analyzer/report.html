@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Report - Job Skill Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Dedicated Print & PDF Export Overrides to Keep Theme Intact */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body {
+                background: #090d16 !important;
+                color: #ffffff !important;
+                font-family: sans-serif;
+                padding: 10px !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .glass-card {
+                background: rgba(20, 10, 35, 0.9) !important;
+                border: 1px solid rgba(168, 85, 247, 0.4) !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+            }
+            /* Force text colors visible in print */
+            h1, h2, h3, p, span {
+                color: #ffffff !important;
+            }
+            .text-pink-400 { color: #f472b6 !important; }
+            .text-indigo-300 { color: #a5b4fc !important; }
+            .text-emerald-400 { color: #34d399 !important; }
+            .text-purple-300, .text-purple-400 { color: #d8b4fe !important; }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 min-h-screen text-white font-sans p-6">
+
+    <!-- Top Navigation Bar (Hidden during printing) -->
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-purple-500/30 gap-4 no-print">
+        <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            📈 Student Performance & Career Report
+        </h1>
+        <div class="flex items-center gap-3">
+            <!-- Download / Print Button -->
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-sm transition shadow-lg shadow-purple-900/50 flex items-center gap-2">
+                📥 Download Report (PDF)
+            </button>
+            <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                🏠 Dashboard
+            </a>
+            <a href="{% url 'take_quiz' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                📝 Take Quiz
+            </a>
+            <form action="{% url 'logout' %}" method="POST" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="px-4 py-2 rounded-xl bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-sm font-semibold transition">
+                    🚪 Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Top Metric Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-pink-500">
+                <p class="text-xs text-purple-300 font-medium">Target Role</p>
+                <h3 class="text-xl font-bold mt-1 text-white">{{ profile.target_role|default:"Not Set" }}</h3>
+                <p class="text-xs text-purple-400 mt-2">Level: {{ profile.experience_level }}</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-purple-500">
+                <p class="text-xs text-purple-300 font-medium">Skill Match Score</p>
+                <h3 class="text-2xl font-extrabold mt-1 text-pink-400">{{ match_percentage }}%</h3>
+                <p class="text-xs text-purple-400 mt-2">Based on database job requirements</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-indigo-500">
+                <p class="text-xs text-purple-300 font-medium">Avg Quiz Score</p>
+                <h3 class="text-2xl font-extrabold mt-1 text-indigo-300">{{ avg_quiz_score }}%</h3>
+                <p class="text-xs text-purple-400 mt-2">Evaluated knowledge assessments</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-emerald-500">
+                <p class="text-xs text-purple-300 font-medium">Career Readiness Index</p>
+                <h3 class="text-2xl font-extrabold mt-1 text-emerald-400">{{ readiness_score }}%</h3>
+                <p class="text-xs text-purple-400 mt-2">Predicted market employability</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Chart 1: Skill Gap Breakdown (Doughnut) -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">🎯 Skill Gap Distribution</h3>
+                <div class="relative h-64 flex items-center justify-center">
+                    <canvas id="skillGapChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Quiz Score Progression (Bar Chart) -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">📊 Quiz Performance History</h3>
+                <div class="relative h-64 flex items-center justify-center">
+                    <canvas id="quizPerfChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Actionable Learning Suggestions & Missing Skills -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Missing Skills Breakdown -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">⚠️ Missing Skills to Acquire</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% if missing_skills %}
+                        {% for skill in missing_skills %}
+                            <span class="px-3 py-1.5 rounded-xl bg-rose-900/50 border border-rose-500/30 text-rose-200 text-xs font-semibold">
+                                ❌ {{ skill }}
+                            </span>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-sm text-emerald-400 font-medium">🎉 Phenomenal! You have 0 missing skills for your target role.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Personalized Learning Roadmap Suggestions -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">💡 Personalized Learning Roadmap</h3>
+                <ul class="space-y-3 max-h-72 overflow-y-auto pr-2">
+                    {% for suggestion in suggestions %}
+                        <li class="bg-purple-950/40 p-3 rounded-xl border border-purple-500/20 text-sm text-purple-200 flex items-start gap-2">
+                            <span>🚀</span>
+                            <span>{{ suggestion|safe }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Chart.js Script Initialization -->
+    <script>
+        // Skill Gap Doughnut Chart
+        const matchedCount = {{ matched_skills|length }};
+        const missingCount = {{ missing_skills|length }};
+
+        const ctx1 = document.getElementById('skillGapChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Matched Skills', 'Missing Skills'],
+                datasets: [{
+                    data: [matchedCount, missingCount],
+                    backgroundColor: ['#10b981', '#f43f5e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#e2e8f0', font: { family: 'sans-serif', size: 12 } }
+                    }
+                }
+            }
+        });
+
+        // Quiz Performance Chart (Dynamic Progression)
+        const quizScores = {{ quiz_scores_json|safe }};
+        const quizLabels = quizScores.map((_, index) => `Quiz #${index + 1}`);
+
+        const ctx2 = document.getElementById('quizPerfChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: quizLabels,
+                datasets: [{
+                    label: 'Score %',
+                    data: quizScores,
+                    backgroundColor: '#a855f7',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#cbd5e1' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    x: {
+                        ticks: { color: '#cbd5e1' },
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

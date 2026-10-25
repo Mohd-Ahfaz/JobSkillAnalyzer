@@ -1,0 +1,45 @@
+{% extends 'analyzer/base.html' %}
+
+{% block title %}Register - Job Skill Analyzer{% endblock %}
+
+{% block content %}
+<style>
+    /* Force typed text color inside input fields to black */
+    .glass-card input, 
+    .glass-card select, 
+    .glass-card textarea {
+        color: #000000 !important;
+    }
+</style>
+
+<div class="glass-card">
+    <div style="display: inline-block; background: rgba(197, 72, 255, 0.15); border: 1px solid rgba(197, 72, 255, 0.4); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; color: #ffffff; margin-bottom: 0.8rem; font-weight: 500;">
+        📊 AI-Powered Skill Analytics
+    </div>
+
+    <h2 style="margin-bottom: 0.5rem; color: #fff;">Create Account</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Join to start analyzing your job skills</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div style="margin-bottom: 1rem;">
+                <label style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div style="color: #ff6b6b; font-size: 0.8rem; margin-top: 0.2rem;">
+                        {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="form-btn">Create Account</button>
+    </form>
+
+    <div class="form-footer">
+        Already have an account? <a href="{% url 'login' %}">Sign in here</a>
+    </div>
+</div>
+{% endblock %}

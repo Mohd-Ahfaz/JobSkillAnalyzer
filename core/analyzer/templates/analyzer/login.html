@@ -1,0 +1,37 @@
+{% extends 'analyzer/base.html' %}
+
+{% block title %}Login - Job Skill Analyzer{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <div style="display: inline-block; background: rgba(197, 72, 255, 0.15); border: 1px solid rgba(197, 72, 255, 0.4); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; color: #ffffff; margin-bottom: 0.8rem; font-weight: 500;">
+        📊 AI-Powered Skill Analytics
+    </div>
+
+    <h2 style="margin-bottom: 0.5rem; color: #fff;">Welcome Back</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Sign in to analyze your skills</p>
+    
+    {% if form.errors %}
+        <div style="background: rgba(255, 0, 0, 0.2); border: 1px solid #ff4d4d; color: #ffcccc; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+            Invalid username or password. Please try again.
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div style="margin-bottom: 1rem;">
+                <label style="color: black; font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="form-btn">Sign In</button>
+    </form>
+
+    <div class="form-footer">
+        Don't have an account? <a href="{% url 'register' %}"; style="color : #fff;">Register here</a>
+    </div>
+</div>
+{% endblock %}

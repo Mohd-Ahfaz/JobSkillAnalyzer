@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Job Skill Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 min-h-screen text-white font-sans p-6">
+
+    <!-- Top Navigation Bar -->
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-purple-500/30 gap-4">
+        <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            ⚡ Job Skill Analyzer Dashboard
+        </h1>
+        <div class="flex items-center gap-3">
+            <a href="{% url 'update_skills' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                🛠️ Update Skills
+            </a>
+            <a href="{% url 'take_quiz' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                📝 Take Quiz
+            </a>
+            <a href="{% url 'report' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                📈 Report
+            </a>
+            <a href="{% url 'upload_job' %}" class="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-sm font-semibold transition shadow-lg shadow-purple-900/50">
+                📁 Upload Job (DB)
+            </a>
+            <form action="{% url 'logout' %}" method="POST" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="px-4 py-2 rounded-xl bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-sm font-semibold transition">
+                    🚪 Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Column: User Profile & Database Role Selector -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Welcome Card -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h2 class="text-xl font-bold">Welcome back, {{ request.user.username }}! ⚽</h2>
+                    <p class="text-purple-300 text-sm mt-1">
+                        Target Role: <span class="text-white font-medium">{{ profile.target_role }}</span> | 
+                        Experience: <span class="text-white font-medium">{{ profile.experience_level }}</span>
+                    </p>
+                </div>
+                <div class="bg-purple-950/60 px-4 py-3 rounded-xl border border-purple-500/20">
+                    <p class="text-xs text-purple-300 font-medium">Your Primary Skills:</p>
+                    <p class="text-sm font-semibold text-purple-100">{{ profile.primary_skills }}</p>
+                </div>
+            </div>
+
+            <!-- Database Role Form -->
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
+                    <label class="block text-md font-bold text-purple-200">
+                        🎯 Select Target Role from Database[cite: 1]
+                    </label>
+                    <select name="role_id" class="w-full bg-slate-900/80 border border-purple-500/30 rounded-xl p-3 text-white focus:outline-none focus:border-purple-400 transition">
+                        <option value="">-- Choose a Role from Database --[cite: 2]</option>
+                        {% for role in target_roles %}
+                            <option value="{{ role.id }}" {% if selected_role_id == role.id %}selected{% endif %}>
+                                {{ role.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    {% if combined_jd_text %}
+                        <div class="mt-4">
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">📁 Fetched Job Description Content[cite: 1]:</label>
+                            <div class="bg-slate-950/50 p-3 rounded-xl text-xs text-purple-200 border border-purple-500/20 max-h-32 overflow-y-auto">
+                                {{ combined_jd_text }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Analyze Skills Button -->
+                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold transition shadow-lg shadow-purple-900/50 flex items-center justify-center gap-2">
+                        🔍 Analyze Skills[cite: 1, 2]
+                    </button>
+                </div>
+            </form>
+
+        </div>
+
+        <!-- Right Column: Skill Match Breakdown -->
+        <div class="lg:col-span-1">
+            <div class="glass-card p-6 rounded-2xl shadow-xl sticky top-6 space-y-6">
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3 flex items-center gap-2">
+                    📊 Skill Match Breakdown[cite: 1, 2]
+                </h3>
+
+                {% if match_percentage is not None %}
+                    <!-- Match Score Display -->
+                    <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20 flex justify-between items-center">
+                        <span class="text-sm font-medium text-purple-300">Match Score:[cite: 1, 2]</span>
+                        <span class="text-2xl font-extrabold text-pink-400">{{ match_percentage }}%[cite: 1, 2]</span>
+                    </div>
+
+                    <!-- Extracted & Matched Skills -->
+                    <div>
+                        <p class="text-xs font-semibold text-purple-300 mb-2">Extracted & Matched Skills:[cite: 1, 2]</p>
+                        <div class="flex flex-wrap gap-2">
+                            {% if matched_skills %}
+                                {% for skill in matched_skills %}
+                                    <span class="px-3 py-1 rounded-full bg-emerald-900/50 border border-emerald-500/30 text-emerald-200 text-xs font-medium">
+                                        {{ skill }}
+                                    </span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-xs text-slate-400 italic">No direct matches found.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Missing Skills to Learn -->
+                    <div>
+                        <p class="text-xs font-semibold text-purple-300 mb-2">Missing Skills to Learn:[cite: 1, 2]</p>
+                        <div class="flex flex-wrap gap-2">
+                            {% if missing_skills %}
+                                {% for skill in missing_skills %}
+                                    <span class="px-3 py-1 rounded-full bg-rose-900/50 border border-rose-500/30 text-rose-200 text-xs font-medium">
+                                        {{ skill }}
+                                    </span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-xs text-emerald-400 font-medium">🎉 You match all extracted skills!</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-sm text-purple-300/70 italic text-center py-10">
+                        Select a database role above and click <span class="text-pink-400 font-semibold">Analyze Skills</span> to run your analysis, bruh! 🏆[cite: 1, 2]
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

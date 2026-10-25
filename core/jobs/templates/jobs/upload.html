@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Job Description - Job Skill Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 min-h-screen text-white font-sans p-6">
+
+    <div class="max-w-2xl mx-auto mt-10">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-purple-500/30">
+            <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                📂 Upload Job Description (Database)
+            </h1>
+            <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Upload Form Card -->
+        <div class="glass-card p-8 rounded-2xl shadow-2xl">
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div>
+                        <label class="block text-sm font-medium text-purple-200 mb-2">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-red-400 text-xs mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold transition shadow-lg shadow-purple-900/50">
+                    Upload & Extract Text 🚀
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

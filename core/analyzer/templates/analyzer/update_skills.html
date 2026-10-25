@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Skills - Job Skill Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 min-h-screen text-white font-sans flex items-center justify-center p-6">
+
+    <div class="max-w-xl w-full glass-card p-8 rounded-2xl shadow-2xl space-y-6">
+        <h2 class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 text-center">
+            🛠️ Update Your Skill Profile
+        </h2>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div>
+                    <label class="block text-sm font-semibold text-purple-200 mb-1">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-rose-400 text-xs mt-1">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class="flex gap-4 pt-4">
+                <button type="submit" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold transition shadow-lg shadow-purple-900/50">
+                    💾 Save Skills
+                </button>
+                <a href="{% url 'dashboard' %}" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-purple-500/30 text-center font-semibold transition">
+                    ⬅️ Back
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
