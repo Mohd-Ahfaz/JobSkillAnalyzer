@@ -78,14 +78,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'job_analyzer_db',
-        'USER': 'root',
-        'PASSWORD': 'mohdahfaz180.', # leave empty '' if using default XAMPP
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': 'defaultdb',  
+        'USER': 'avnadmin',           
+        'PASSWORD': 'AVNS_kqf0RmJ5UjxcpcmxGvh',   
+        'HOST': 'mysql-3f53700d-job-analyzer-db.g.aivencloud.com',           
+        'PORT': '22396',           
+        'OPTIONS': {
+            'ssl': {'ssl-mode': 'REQUIRED'}, 
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
