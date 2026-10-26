@@ -56,23 +56,23 @@
     <!-- Top Navigation Bar (Hidden during printing) -->
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-purple-500/30 gap-4 no-print">
         <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            📈 Student Performance & Career Report
+             Student Performance & Career Report
         </h1>
         <div class="flex items-center gap-3">
             <!-- Download / Print Button -->
             <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-sm transition shadow-lg shadow-purple-900/50 flex items-center gap-2">
-                📥 Download Report (PDF)
+                 Download Report (PDF)
             </button>
             <a href="{% url 'dashboard' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
-                🏠 Dashboard
+                 Dashboard
             </a>
             <a href="{% url 'take_quiz' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
-                📝 Take Quiz
+                 Take Quiz
             </a>
             <form action="{% url 'logout' %}" method="POST" class="inline">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 rounded-xl bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-sm font-semibold transition">
-                    🚪 Logout
+                     Logout
                 </button>
             </form>
         </div>
@@ -109,7 +109,7 @@
             
             <!-- Chart 1: Skill Gap Breakdown (Doughnut) -->
             <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
-                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">🎯 Skill Gap Distribution</h3>
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3"> Skill Gap Distribution</h3>
                 <div class="relative h-64 flex items-center justify-center">
                     <canvas id="skillGapChart"></canvas>
                 </div>
@@ -117,7 +117,7 @@
 
             <!-- Chart 2: Quiz Score Progression (Bar Chart) -->
             <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
-                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">📊 Quiz Performance History</h3>
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3"> Quiz Performance History</h3>
                 <div class="relative h-64 flex items-center justify-center">
                     <canvas id="quizPerfChart"></canvas>
                 </div>
@@ -139,18 +139,18 @@
                             </span>
                         {% endfor %}
                     {% else %}
-                        <p class="text-sm text-emerald-400 font-medium">🎉 Phenomenal! You have 0 missing skills for your target role.</p>
+                        <p class="text-sm text-emerald-400 font-medium"> Phenomenal! You have 0 missing skills for your target role.</p>
                     {% endif %}
                 </div>
             </div>
 
             <!-- Personalized Learning Roadmap Suggestions -->
             <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
-                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3">💡 Personalized Learning Roadmap</h3>
+                <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3"> Personalized Learning Roadmap</h3>
                 <ul class="space-y-3 max-h-72 overflow-y-auto pr-2">
                     {% for suggestion in suggestions %}
                         <li class="bg-purple-950/40 p-3 rounded-xl border border-purple-500/20 text-sm text-purple-200 flex items-start gap-2">
-                            <span>🚀</span>
+                            <span>#</span>
                             <span>{{ suggestion|safe }}</span>
                         </li>
                     {% endfor %}

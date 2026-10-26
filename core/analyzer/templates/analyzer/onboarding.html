@@ -3,9 +3,91 @@
 {% block title %}Career Profile Setup - Job Skill Analyzer{% endblock %}
 
 {% block content %}
+<style>
+    /* 1. Limit the card width to a compact, standard form size */
+    .glass-card {
+        max-width: 440px !important;
+        margin: 2rem auto !important;
+        padding: 2.5rem 2rem !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. Align labels and form containers to the left */
+    .glass-card label,
+    .glass-card form div {
+        text-align: left !important;
+    }
+
+    .glass-card label {
+        display: block !important;
+        font-weight: 500 !important;
+        font-size: 0.875rem !important;
+        color: #E2E8F0 !important;
+        margin-bottom: 4px !important;
+        margin-top: 12px !important;
+    }
+
+    /* 3. Style text boxes and dropdowns cleanly */
+    .glass-card input[type="text"],
+    .glass-card input[type="password"],
+    .glass-card input[type="email"],
+    .glass-card select,
+    .glass-card textarea {
+        width: 100% !important;
+        padding: 10px 14px !important;
+        margin-top: 4px !important;
+        margin-bottom: 12px !important;
+        color: #0F172A !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 8px !important;
+        font-size: 0.95rem !important;
+        outline: none !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Glow effect on clicking input or dropdown */
+    .glass-card input:focus,
+    .glass-card select:focus {
+        background-color: #ffffff !important;
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+    }
+
+    /* 4. Sleek Submit Button */
+    .glass-card button,
+    .glass-card input[type="submit"] {
+        width: 100% !important;
+        padding: 11px 16px !important;
+        margin-top: 1.25rem !important;
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        border: none !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35) !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .glass-card button:hover,
+    .glass-card input[type="submit"]:hover {
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5) !important;
+    }
+
+    /* Center header titles and descriptive text */
+    .glass-card h2,
+    .glass-card h1,
+    .glass-card p {
+        text-align: center !important;
+    }
+</style>
 <div class="glass-card" style="max-width: 500px;">
     <div style="display: inline-block; background: rgba(197, 72, 255, 0.15); border: 1px solid rgba(197, 72, 255, 0.4); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; color: #ffffff; margin-bottom: 0.8rem; font-weight: 500;">
-        🚀 Step 2 of 2: Profile Setup
+        Step 2 of 2: Profile Setup
     </div>
     
     <h2 style="margin-bottom: 0.4rem; color: #ffffff;">Tell us about your career goals</h2>

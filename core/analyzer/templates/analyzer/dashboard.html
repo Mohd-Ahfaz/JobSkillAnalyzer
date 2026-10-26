@@ -19,17 +19,17 @@
     <!-- Top Navigation Bar -->
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center mb-8 pb-4 border-b border-purple-500/30 gap-4">
         <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            ⚡ Job Skill Analyzer Dashboard
+             Job Skill Analyzer Dashboard
         </h1>
         <div class="flex items-center gap-3">
             <a href="{% url 'update_skills' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
-                🛠️ Update Skills
+                 Update Skills
             </a>
             <a href="{% url 'take_quiz' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
-                📝 Take Quiz
+                 Take Quiz
             </a>
             <a href="{% url 'report' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
-                📈 Report
+                Report
             </a>
             <a href="{% url 'upload_job' %}" class="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-sm font-semibold transition shadow-lg shadow-purple-900/50">
                 📁 Upload Job (DB)
@@ -37,7 +37,7 @@
             <form action="{% url 'logout' %}" method="POST" class="inline">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 rounded-xl bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-sm font-semibold transition">
-                    🚪 Logout
+                     Logout
                 </button>
             </form>
         </div>
@@ -69,10 +69,10 @@
                 
                 <div class="glass-card p-6 rounded-2xl shadow-xl space-y-4">
                     <label class="block text-md font-bold text-purple-200">
-                        🎯 Select Target Role from Database[cite: 1]
+                        What's Your Next Career Move?
                     </label>
                     <select name="role_id" class="w-full bg-slate-900/80 border border-purple-500/30 rounded-xl p-3 text-white focus:outline-none focus:border-purple-400 transition">
-                        <option value="">-- Choose a Role from Database --[cite: 2]</option>
+                        <option value="">Select Your Dream Role</option>
                         {% for role in target_roles %}
                             <option value="{{ role.id }}" {% if selected_role_id == role.id %}selected{% endif %}>
                                 {{ role.title }}
@@ -93,7 +93,7 @@
                 <!-- Analyze Skills Button -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl">
                     <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold transition shadow-lg shadow-purple-900/50 flex items-center justify-center gap-2">
-                        🔍 Analyze Skills[cite: 1, 2]
+                         Analyze Skills
                     </button>
                 </div>
             </form>
@@ -104,19 +104,19 @@
         <div class="lg:col-span-1">
             <div class="glass-card p-6 rounded-2xl shadow-xl sticky top-6 space-y-6">
                 <h3 class="text-lg font-bold border-b border-purple-500/30 pb-3 flex items-center gap-2">
-                    📊 Skill Match Breakdown[cite: 1, 2]
+                    Skill Match Breakdown
                 </h3>
 
                 {% if match_percentage is not None %}
                     <!-- Match Score Display -->
                     <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20 flex justify-between items-center">
-                        <span class="text-sm font-medium text-purple-300">Match Score:[cite: 1, 2]</span>
-                        <span class="text-2xl font-extrabold text-pink-400">{{ match_percentage }}%[cite: 1, 2]</span>
+                        <span class="text-sm font-medium text-purple-300">Match Score:</span>
+                        <span class="text-2xl font-extrabold text-pink-400">{{ match_percentage }}%</span>
                     </div>
 
                     <!-- Extracted & Matched Skills -->
                     <div>
-                        <p class="text-xs font-semibold text-purple-300 mb-2">Extracted & Matched Skills:[cite: 1, 2]</p>
+                        <p class="text-xs font-semibold text-purple-300 mb-2">Extracted & Matched Skills:</p>
                         <div class="flex flex-wrap gap-2">
                             {% if matched_skills %}
                                 {% for skill in matched_skills %}
@@ -132,7 +132,7 @@
 
                     <!-- Missing Skills to Learn -->
                     <div>
-                        <p class="text-xs font-semibold text-purple-300 mb-2">Missing Skills to Learn:[cite: 1, 2]</p>
+                        <p class="text-xs font-semibold text-purple-300 mb-2">Missing Skills to Learn:</p>
                         <div class="flex flex-wrap gap-2">
                             {% if missing_skills %}
                                 {% for skill in missing_skills %}
@@ -141,13 +141,13 @@
                                     </span>
                                 {% endfor %}
                             {% else %}
-                                <span class="text-xs text-emerald-400 font-medium">🎉 You match all extracted skills!</span>
+                                <span class="text-xs text-emerald-400 font-medium">You match all extracted skills!</span>
                             {% endif %}
                         </div>
                     </div>
                 {% else %}
                     <p class="text-sm text-purple-300/70 italic text-center py-10">
-                        Select a database role above and click <span class="text-pink-400 font-semibold">Analyze Skills</span> to run your analysis, bruh! 🏆[cite: 1, 2]
+                        Select a target role and click <span class="text-pink-400 font-semibold">Analyze Skills</span> to evaluate your compatibility!
                     </p>
                 {% endif %}
             </div>
