@@ -31,9 +31,7 @@
             <a href="{% url 'report' %}" class="px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-400/30 text-sm font-semibold transition">
                 Report
             </a>
-            <a href="{% url 'upload_job' %}" class="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-sm font-semibold transition shadow-lg shadow-purple-900/50">
-                📁 Upload Job (DB)
-            </a>
+            
             <form action="{% url 'logout' %}" method="POST" class="inline">
                 {% csrf_token %}
                 <button type="submit" class="px-4 py-2 rounded-xl bg-red-900/40 hover:bg-red-800/60 border border-red-500/30 text-sm font-semibold transition">
